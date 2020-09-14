@@ -5,4 +5,8 @@ data class Poop(var kg: Double) {
     fun clean() {
         kg = 0.0
     }
+
+    fun smell() {
+        //It's smelly
+    }
 }

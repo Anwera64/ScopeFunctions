@@ -2,7 +2,10 @@ package com.anwera97.myapplication.entities
 
 import kotlin.random.Random
 
-data class Dog(val name: String, var age: Int, val race: String) {
+data class Dog(var name: String?, var age: Int, val race: String) {
+
+    constructor(age: Int, race: String) : this(null, age, race)
+
     var owner: Person? = null
 
     fun ageUp() = age++

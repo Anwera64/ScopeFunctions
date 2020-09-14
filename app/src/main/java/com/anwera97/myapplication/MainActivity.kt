@@ -15,17 +15,14 @@ class MainActivity : AppCompatActivity() {
         val dog = Dog("Bielka", 6, "Chusca")
 
         noScope(person, dog)
-
-        letScope(person)
-
+        letScope(dog)
         runScope(person, dog)
-
         alsoScope(person, dog)
-
         applyScope(dog)
     }
 
     private fun applyScope(dog: Dog) {
+        Person("Anton", 22).adoptDog(dog)
         dog.apply {
             feed()
             bathe()
@@ -37,31 +34,30 @@ class MainActivity : AppCompatActivity() {
         person: Person,
         dog: Dog
     ) {
-        person.batheDog()
-        person.feedDog()
-        dog.poop().also(person::cleanDogPoop)
+        person.batheDog(dog)
+        person.feedDog(dog)
+        dog.poop().also { person.cleanDogPoop(it) }
     }
 
     private fun runScope(
         person: Person,
         dog: Dog
     ) {
-        person.run {
+        val poop = person.run {
             adoptDog(dog)
-            feedDog()
-            batheDog()
+            feedDog(dog)
+            batheDog(dog)
             dog.poop()
-        }.clean()
+        }
+        person.cleanDogPoop(poop)
     }
 
-    private fun letScope(person: Person) {
-        var poop: Poop? = null
-        person.dog?.apply {
-            feed()
-            bathe()
-            poop = poop()
+    private fun letScope(dog: Dog) {
+        dog.owner?.let {
+            it.feedDog(dog)
+            it.batheDog(dog)
+            it.cleanDogPoop(dog.poop())
         }
-        person.cleanDogPoop(poop!!)
     }
 
     private fun noScope(
@@ -70,8 +66,8 @@ class MainActivity : AppCompatActivity() {
     ) {
         //NO SCOPES
         person.adoptDog(dog)
-        person.feedDog()
-        person.batheDog()
+        person.feedDog(dog)
+        person.batheDog(dog)
 
         val poop = dog.poop()
         person.cleanDogPoop(poop)
